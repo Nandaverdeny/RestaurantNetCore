@@ -1,0 +1,8 @@
+/Users/verdeny/RestaurantNetCore/src/dotnetcore_postgreSQL/bin/Debug/netcoreapp1.0/dotnetcore_postgreSQL.deps.json
+/Users/verdeny/RestaurantNetCore/src/dotnetcore_postgreSQL/bin/Debug/netcoreapp1.0/dotnetcore_postgreSQL.runtimeconfig.json
+/Users/verdeny/RestaurantNetCore/src/dotnetcore_postgreSQL/bin/Debug/netcoreapp1.0/dotnetcore_postgreSQL.runtimeconfig.dev.json
+/Users/verdeny/RestaurantNetCore/src/dotnetcore_postgreSQL/bin/Debug/netcoreapp1.0/dotnetcore_postgreSQL.dll
+/Users/verdeny/RestaurantNetCore/src/dotnetcore_postgreSQL/bin/Debug/netcoreapp1.0/dotnetcore_postgreSQL.pdb
+/Users/verdeny/RestaurantNetCore/src/dotnetcore_postgreSQL/obj/Debug/netcoreapp1.0/dotnetcore_postgreSQL.AssemblyInfo.cs
+/Users/verdeny/RestaurantNetCore/src/dotnetcore_postgreSQL/obj/Debug/netcoreapp1.0/dotnetcore_postgreSQL.dll
+/Users/verdeny/RestaurantNetCore/src/dotnetcore_postgreSQL/obj/Debug/netcoreapp1.0/dotnetcore_postgreSQL.pdb

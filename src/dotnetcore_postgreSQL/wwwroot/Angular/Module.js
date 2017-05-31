@@ -1,0 +1,1 @@
+﻿angular.module('testApp', ['ngResource', 'testController', 'testService', 'ui.bootstrap', 'dndLists']);
