@@ -1,0 +1,57 @@
+@model List<RestaurantNetCore.Models.ApplicationUserRoleViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            @*<th>
+                @Html.DisplayNameFor(model => model.RoleId)
+            </th>*@
+            <th>
+                @*@Html.DisplayNameFor(model => model.RoleName)*@
+                RoleName
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>*@
+            <th>
+                @*@Html.DisplayNameFor(model => model.UserName)*@
+                UserName
+            </th>
+           
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            @*<td>
+                @item.RoleId
+            </td>*@
+            <td>
+                @item.RoleName
+            </td>
+            @*<td>
+                @item.UserId
+            </td>*@
+            <td>
+                @item.UserName
+            </td>
+            
+            
+            <td>
+                @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
+                <a asp-action="Delete" asp-route-userId="@item.UserId" asp-route-roleId="@item.RoleId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

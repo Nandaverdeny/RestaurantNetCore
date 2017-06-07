@@ -1,0 +1,426 @@
+@{
+    Layout = "~/Views/Shared/_LayoutNoContainer.cshtml";
+}
+
+
+<style>
+    .rows {
+    }
+
+    .col-lg-3s {
+        padding-bottom: 30px;
+    }
+
+    .btn-lgs {
+        font-size: 20px;
+        background-color: limegreen;
+        color: white;
+    }
+
+    .imgs {
+        width: 100px;
+        height: 100px;
+        border-radius: 10px;
+    }
+
+    .scroll {
+        overflow-y: auto;
+        overflow-x: hidden;
+        max-height: 55vh;
+    }
+
+    .konten {
+        width: 700px;
+    }
+
+    .sisi {
+        padding-left: 20px;
+    }
+
+    input, select, textarea {
+        max-width: unset;
+    }
+    
+</style>
+
+<div class="row">
+    <div class="col-md-6">
+        <div ng-repeat="type in order">
+            <h4>
+                {{type.TypeName}}
+                @if (User.IsInRole("Admin") || User.IsInRole("Waiter"))
+                {
+                    <bdi ng-if="type.TypeID == 1">
+                        <button data-toggle="modal" data-target="#myModal" ng-click="GetTable(type.TypeID)" data-backdrop="static" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Order </button>
+                    </bdi>
+                    <bdi ng-if="type.TypeID == 2">
+                        <button data-toggle="modal" data-target="#myModal2" ng-click="GetMenu(null,'',type.TypeID)" data-backdrop="static" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Create Order </button>
+                    </bdi>
+                }
+                
+            </h4>
+            <div class="row" style="overflow: auto; max-height:50vh ; ">
+
+                <div ng-show="type.Order != null" class="col-md-4" ng-repeat="data in type.Order" style="padding-bottom:10px">
+                    <div ng-if="data.Status == 0">
+                        <button class="btn btn-primary btn-lg  btn-block" ng-click="DetailOrder(data.OrderID)"><i class="glyphicon glyphicon-cutlery "></i> {{data.TableName}}{{data.Name}} <span class="badge">{{data.OrderServed}}</span></button>
+                    </div>
+                    <div ng-if="data.Status != 0">
+                        <button class="btn btn-warning btn-lg  btn-block" ng-click="DetailOrder(data.OrderID)"><i class="glyphicon glyphicon-cutlery "></i> {{data.TableName}}{{data.Name}} <span class="badge">{{data.OrderServed}}</span></button>
+                    </div>
+                </div>
+                <div ng-hide="type.Order != false" class="col-md-4">
+                    <h1>Empty List</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6" style="background-color:#ecf0f1; border-radius:20px; ">
+        <div class="col-md-12" ng-if="detailorder.OrderID != null">
+            <h4>
+                Detail Order
+                @if (User.IsInRole("Admin") || User.IsInRole("Waiter"))
+                {
+
+                    <button ng-click="addOrder(detailorder.OrderID)" data-toggle="modal" data-backdrop="static" data-target="#myModal2" class="btn btn-primary">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        Add Order
+                    </button>
+                    <button ng-click="edit()" ng-hide="isEditMode === true || isEditAllMode === true" class="btn btn-primary" @*data-toggle="modal" data-target="#ModalEdit" *@>
+                        <i class="glyphicon glyphicon-edit"></i>
+                        Edit
+                    </button>
+                }
+               
+                
+                @if (User.IsInRole("Admin"))
+                {
+                    <button ng-click="editall()" ng-hide="isEditAllMode === true || isEditMode === true  " class="btn btn-warning" @*data-toggle="modal" data-target="#ModalEdit" *@>
+                        <i class="glyphicon glyphicon-edit"></i>
+                        Edit All
+                    </button>
+                }
+                
+                    
+               
+                
+                <button ng-show="isEditMode === true " ng-click="save()" class="btn btn-primary">
+                    <i class="glyphicon glyphicon-floppy-save"></i>
+                    Save
+                </button>
+                <button ng-show="isEditAllMode === true" ng-click="saveall()" class="btn btn-primary">
+                    <i class="glyphicon glyphicon-floppy-save"></i>
+                    Save
+                </button>
+
+                
+            </h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><b>Order No : {{detailorder.OrderID}}</b></h5>
+                </div>
+                <div class="col-md-6">
+                    <h5><em>{{detailorder.OrderDate}}</em></h5>
+                </div>
+            </div>
+            <div class="row">
+                <div style="height:100%  inherit;">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>
+                                Menu
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                            <th>
+                                Qty
+                            </th>
+                            <th>
+                                Harga
+                            </th>
+                            <th>
+                                Total
+                            </th>
+                            <th>
+                                Notes
+                            </th>
+                            <th></th>
+                        </tr>
+                            </thead>
+                        <tbody style="overflow:auto ;height:200px" >
+                            <tr ng-repeat="item in detailorder.OrderItem">
+                                <td>{{item.MenuName}}</td>
+                                <td>
+                                    <span ng-if="item.Status == 'Order' || item.Status == 'Cook' || item.Status == 'FinishCook'" class="label label-primary">{{item.Status}}</span>
+                                    <span ng-if="item.Status == 'Served'" class="label label-success">{{item.Status}}</span>
+                                </td>
+                                <td ng-show="!isEditMode && !isEditAllMode">{{item.Qty}}</td>
+                                <td ng-show="(isEditMode && item.Status == 'Order')||(isEditAllMode)">
+                                    <button class="btn btn-primary btn-sm" ng-click="EditQtyMinus($index)">
+                                        <i class="glyphicon glyphicon-minus"></i>
+                                    </button>
+                                    <label style="padding-left:5px; padding-right:5px">{{item.Qty}}</label>
+                                    <button class="btn btn-primary btn-sm" ng-click="EditQtyPlus($index)">
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                    </button>
+                                </td>
+                                <td ng-show="isEditMode && item.Status != 'Order'">{{item.Qty}}</td>
+                                <td>{{item.Price}}</td>
+                                <td>{{item.Price*item.Qty}}</td>
+                                <td ng-show="!isEditMode && !isEditAllMode">{{item.Notes}}</td>
+                                <td ng-show="(isEditMode && item.Status == 'Order') ||(isEditAllMode)" style="width:30%"><input class="form-control" ng-model="item.Notes" /></td>
+                                <td ng-show="(isEditMode && item.Status != 'Order') ">{{item.Notes}}</td>
+                                <td>
+                                    @if (User.IsInRole("Admin") || User.IsInRole("Waiter"))
+                                    {
+                                        <button ng-if="item.Status == 'Order'" ng-click="cancel(item.OrderItemID,detailorder.OrderID)" class="btn btn-danger btn-xs btn-block">Cancel</button>
+                                        <button ng-if="item.Status == 'FinishCook'" ng-click="serve(item.OrderItemID,detailorder.OrderID)" class="btn btn-primary btn-xs btn-block">Served</button>
+                                    }
+                                    
+                                </td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                    <table class="table table-responsive table-bordered ">
+                        <tr>
+                            <td>SubTotal</td>
+                            <td><b style="font-size:larger">{{grandTotal}}</b></td>
+                        </tr>
+                        <tr>
+                            <td>Pajak</td>
+                            <td><b style="font-size:larger">{{tax}}</b></td>
+                        </tr>
+                        <tr>
+                            <td>GrandTotal</td>
+                            <td><b style="font-size:larger">{{tax + grandTotal}}</b></td>
+                        </tr>
+                    </table>
+                    <div ng-show="pay === true">
+                        <input type="text" ng-model="uang" class="form-control" />
+                        <h2>Kembalian : {{uang-(grandTotal + tax)}}</h2>
+                    </div>
+
+                    <div ng-show="pay != true" class="btn-group btn-group-justified">
+                        <div class="btn-group">
+                            <button class="btn btn-lg btn-primary " style="margin-bottom:10px" ng-click="print('DetailOrder')"><i class="glyphicon glyphicon-print"></i> Print </button>
+                        </div>
+                        @if (User.IsInRole("Admin") || User.IsInRole("Cashier"))
+                        {
+                            <div class="btn-group">
+                                <button class="btn btn-lg btn-success " style="margin-bottom:10px" ng-click="Pay()"><i class="glyphicon glyphicon-credit-card"></i> Pay </button>
+                            </div>
+                        }
+                        
+                    </div>
+                    <div ng-show="pay == true" class="btn-group btn-group-justified">
+                        <div class="btn-group">
+                            <button class="btn btn-danger btn-lg" ng-click="CancelPay()">Cancel</button>
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn btn-success btn-lg" ng-click="GoPay(detailorder.OrderID,uang,grandTotal+tax)">Pay</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-if="detailorder.OrderID == null">
+            <h5>Mohon pilih order untuk melihat detail order</h5>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalEdit">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">CheckOut</h4>
+            </div>
+            <div class="modal-body">
+                <div style="max-height:50vh ; overflow:auto">
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <td>Nasi Goreng</td>
+                                <td><input type="text" value="3" /></td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-primary btn-block" data-dismiss="modal" data-target="#ModalCheckOut">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" ng-click="reset()">&times;</button>
+                <h4 class="modal-title">Choose Table</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row rows">
+                    <div class="col-lg-3 col-lg-3s" ng-repeat="tab in dataTable">
+                        <input type="button" class="btn btn-lg btn-lgs" data-toggle="modal" data-target="#myModal2" data-dismiss="modal" value="{{tab.TableName}}" data-backdrop="static" ng-click="GetMenu(tab.TableID, tab.TableName, typeID)" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div tabindex="-1" id="myModal2" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="width:70%">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" ng-click="reset()">&times;</button>
+                <div ng-show="typeID == 1" class="modal-title">
+                    <h4>{{baru.TableName}}</h4>
+                </div>
+                <div ng-show="typeID == 2">
+                  
+                        <h4 ng-if="isAddOrder === false" class="modal-title">Input Name Here</h4>
+                        <input ng-show="isAddOrder === false" type="text" ng-model="Name" />
+                        <h4 ng-if="isAddOrder === true" class="modal-title">{{Name}}</h4>
+            
+                    
+                </div>
+                <p>Restaurant Menu</p>
+            </div>
+            <div class="modal-body" style="height:480px;">
+                <div class="row">
+                    <div class="col-lg-4">
+                        @*drag and drop kak ria*@
+                        <uib-tabset active="active">
+                            <uib-tab ng-repeat="tab in menu.Category" heading="{{tab.CategoryName}}">
+                                <div class="row rows" style="padding-left:10px; padding-top:20px;">
+                                    <ul style="padding-left:10px;" class="scroll" dnd-list="tab.MenuItems">
+                                        <li class="columnangular" ng-repeat="item in tab.OrderItem"                                            
+                                            style="display:inline-block; padding-right:30px">
+                                            <img ng-src="data:{{item.ContentType}};base64,{{item.Content}}" class="imgs" ng-click="addqty(item)"/>
+                                            <h4 style="text-align:center">{{item.MenuName}}</h4>
+                                            <p style="font-size:13px; text-align:center;">{{item.Price}}</p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </uib-tab>
+                        </uib-tabset>
+                    </div>
+
+                    <div class="col-lg-8">
+                        <div class="tabbable">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#fooddetail" data-toggle="tab">Your Order</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="fooddetail" class="tab-pane active scroll" style="height:50vh;">
+                                    <table class="table table-responsive" style="border-bottom-style:hidden">
+                                        <thead>
+                                            <tr>
+                                                <th>Nama</th>
+                                                <th>Qty</th>
+                                                <th>Price</th>
+                                                <th>Notes</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody dnd-list="orderedItems" dnd-drop="addqty(item)">
+                                            <tr ng-repeat="item in orderedItems">
+                                                <td>{{item.MenuName}}</td>
+                                                <td>{{item.Qty}}</td>
+                                                <td>{{item.Price * item.Qty}}</td>
+                                                <td><input class="form-control" ng-model="item.Notes" /></td>
+                                                <td><button class="btn btn-primary" ng-click="delqty(item.MenuID, $index)"><i class="glyphicon glyphicon-remove"></i></button></td>
+                                            </tr>
+                                            <tr>
+                                                <td><button type="button" class="btn btn-primary">Click Your Menu</button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" ng-click="CreateOrder()" >Order</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*untuk print*@
+<div id="DetailOrder" ng-hide="true">
+    <div class="col-md-4">
+        <div class="row">
+            <div class="col-md-6">
+                <h5><b>Order No : {{detailorder.OrderID}}</b></h5>
+            </div>
+            <div class="col-md-6">
+                <h5><em>{{detailorder.OrderDate}}</em></h5>
+            </div>
+        </div>
+        <table class="table table-hover">
+            <tr>
+                <th>
+                    Menu
+                </th>
+
+                <th>
+                    Qty
+                </th>
+                <th>
+                    Harga
+                </th>
+                <th>
+                    Total
+                </th>
+
+                
+            </tr>
+            <tr ng-repeat="item in detailorder.OrderItem">
+                <td>{{item.MenuName}}</td>
+
+                <td>{{item.Qty}}</td>
+                <td>{{item.Price}}</td>
+                <td>{{item.Price*item.Qty}}</td>
+            </tr>
+
+        </table>
+        <table class="table table-responsive table-bordered ">
+            <tr>
+                <td>SubTotal</td>
+                <td>{{grandTotal}}</td>
+            </tr>
+            <tr>
+                <td>Pajak</td>
+                <td>{{tax}}</td>
+            </tr>
+            <tr>
+                <td>GrandTotal</td>
+                <td>{{tax + grandTotal}}</td>
+            </tr>
+        </table>
+    </div>
+</div>

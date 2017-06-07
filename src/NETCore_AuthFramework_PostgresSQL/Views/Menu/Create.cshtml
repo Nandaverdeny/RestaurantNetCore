@@ -1,0 +1,65 @@
+@model RestaurantNetCore.Model.Menu
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="form-horizontal">
+        <h4>Menu</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label  class="col-md-2 control-label">Foto</label>
+            <div class="col-md-10">
+                <input type="file" name="files" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="CategoryID" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="CategoryID" class ="form-control" asp-items="ViewBag.CategoryID"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="MenuDescription" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="MenuDescription" class="form-control" />
+                <span asp-validation-for="MenuDescription" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="MenuName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="MenuName" class="form-control" />
+                <span asp-validation-for="MenuName" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="MenuPrice" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="MenuPrice" class="form-control" />
+                <span asp-validation-for="MenuPrice" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="StatusID" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="StatusID" class ="form-control" asp-items="ViewBag.StatusID"></select>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

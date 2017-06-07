@@ -1,0 +1,9 @@
+/Users/verdeny/NetCoreWAuth/src/NETCore_AuthFramework_PostgresSQL/bin/Debug/netcoreapp1.0/NETCore_AuthFramework_PostgresSQL.deps.json
+/Users/verdeny/NetCoreWAuth/src/NETCore_AuthFramework_PostgresSQL/bin/Debug/netcoreapp1.0/NETCore_AuthFramework_PostgresSQL.runtimeconfig.json
+/Users/verdeny/NetCoreWAuth/src/NETCore_AuthFramework_PostgresSQL/bin/Debug/netcoreapp1.0/NETCore_AuthFramework_PostgresSQL.runtimeconfig.dev.json
+/Users/verdeny/NetCoreWAuth/src/NETCore_AuthFramework_PostgresSQL/bin/Debug/netcoreapp1.0/NETCore_AuthFramework_PostgresSQL.dll
+/Users/verdeny/NetCoreWAuth/src/NETCore_AuthFramework_PostgresSQL/bin/Debug/netcoreapp1.0/NETCore_AuthFramework_PostgresSQL.pdb
+/Users/verdeny/NetCoreWAuth/src/NETCore_AuthFramework_PostgresSQL/obj/Debug/netcoreapp1.0/UserSecretsAssemblyInfo.cs
+/Users/verdeny/NetCoreWAuth/src/NETCore_AuthFramework_PostgresSQL/obj/Debug/netcoreapp1.0/NETCore_AuthFramework_PostgresSQL.AssemblyInfo.cs
+/Users/verdeny/NetCoreWAuth/src/NETCore_AuthFramework_PostgresSQL/obj/Debug/netcoreapp1.0/NETCore_AuthFramework_PostgresSQL.dll
+/Users/verdeny/NetCoreWAuth/src/NETCore_AuthFramework_PostgresSQL/obj/Debug/netcoreapp1.0/NETCore_AuthFramework_PostgresSQL.pdb

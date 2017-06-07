@@ -1,0 +1,62 @@
+
+@{
+    ViewBag.Title = "Kitchen";
+    Layout = "~/Views/Shared/_LayoutNoContainer.cshtml";
+}
+
+
+<div class="col-md-6" ng-repeat="data in kitchenorderitemcatebyorder">
+    <h3>{{data.Status}}</h3>
+    <div class="row" style="overflow-x:auto;white-space:nowrap;direction:rtl">
+        <div ng-hide="order.OrderItem == false" ng-repeat="order in data.Order" class="col-md-5" style="display:inline-table;float:none; direction:initial;">
+            <div class="panel panel-primary">
+                <div class="panel-heading">{{order.TableName}}{{order.Name}}</div>
+                <div class="panel-body">
+                    <div class="table-responsive" style="max-height:60vh;overflow: auto;white-space:nowrap">
+                        <table class="table ">
+                            <tbody ng-repeat="item in order.OrderItem" >
+                                <tr>
+                                    <td>{{item.Qty}}</td>
+                                    <td>{{item.MenuName}}</td>
+                                    <td>
+                                        <button ng-if="data.Status == 'Order'" class="btn btn-primary" ng-click="CookOrderItem(item.OrderItemID)">Cook</button>
+                                        <button ng-if="data.Status == 'Cook'" class="btn btn-success" ng-click="FinishOrderItem(item.OrderItemID)">Done</button>
+                                    </td>
+                                </tr>
+                                <tr ng-if="item.Notes != null && item.Notes != ''">
+                                    <td colspan="3" style="color:gray">{{item.Notes}}</td>
+                                </tr>
+
+                            </tbody>
+
+                            <tr ng-if="data.Status == 'Cook'">
+                                <td colspan="3"><button class="btn btn-primary btn-block" ng-click="printkitchen(order.OrderID)" >All Done</button></td>
+                            </tr>
+                            <tr ng-if="data.Status == 'Order'">
+                                <td colspan="3"><button class="btn btn-primary btn-block" ng-click="cookall(order.OrderID)">All Cook</button></td>
+                            </tr>
+
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-show="data.Order == false">
+            <h1>Empty List</h1>
+        </div>
+    </div>
+    
+</div>
+
+<div id="printkitchen" ng-hide="true">
+    <div class="col-md-4">
+        <h3>{{kitchenprint.TableName}}{{kitchenprint.Name}}</h3>
+        <table class="table table-hover">
+            <tr ng-repeat="data in kitchenprint.OrderItem">
+                <td>{{data.MenuName}}</td>
+                <td>{{data.Qty}}</td>
+            </tr>
+        </table>
+    </div>
+</div>

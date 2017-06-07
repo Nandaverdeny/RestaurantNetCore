@@ -1,0 +1,89 @@
+
+@{
+    ViewBag.Title = "Kitchen";
+    Layout = "~/Views/Shared/_LayoutNoContainer2.cshtml";
+}
+
+<style>
+.account-sidebar-panel {
+    height: 100%;
+    width: 150%;
+    background-color: #337ab7;
+    border-bottom-right-radius:9px;
+    border-top-right-radius:9px;
+    margin-top:-1px;
+}
+
+.rotateSIdeBar {
+    -ms-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+    margin-top: 10vh;
+    font-size: large;
+    font-family: 'Segoe UI';
+    color:white;
+}
+</style>
+
+<div class="row" style="height:46vh;overflow-y:hidden;overflow-x:hidden;padding:10px;" ng-repeat="data in kitchenorderitemcatebyorder">
+    <nav class="Navbar-LeftPosition" style="background: #fff; height:103%;width:27px;border: 3px solid white;-webkit-border-radius: 0px 9px 9px 0px;border-radius: 0px 9px 9px 0px; position:relative;float:right;right:0">
+        <div href="#" class="account-sidebar-panel">
+            <i class="fa fa-angle-right" style="font-size:x-large; margin:10px;"></i>
+            <div class="rotateSIdeBar">{{data.Status}}</div>
+        </div>
+    </nav>
+    <div style="overflow-y:hidden;overflow-x:hidden">
+        <div class="row" style="overflow-x:scroll;overflow-y:scroll; white-space:nowrap;direction:rtl ;height:44vh">
+            <div ng-hide="order.OrderItem == false" ng-repeat="order in data.Order" class="col-md-2" style="display:inline-table;float:none; direction:initial;">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">{{order.TableName}}{{order.Name}}</div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table ">
+                                <tbody ng-repeat="item in order.OrderItem">
+                                    <tr>
+                                        <td>{{item.Qty}}</td>
+                                        <td>{{item.MenuName}}</td>
+                                        <td>
+                                            <button ng-if="data.Status == 'Order'" class="btn btn-primary" ng-click="CookOrderItem(item.OrderItemID)">Cook</button>
+                                            <button ng-if="data.Status == 'Cook'" class="btn btn-success" ng-click="FinishOrderItem(item.OrderItemID)">Done</button>
+                                        </td>
+                                    </tr>
+                                    <tr ng-if="item.Notes != null && item.Notes != ''">
+                                        <td colspan="3" style="color:gray">{{item.Notes}}</td>
+                                    </tr>
+
+                                </tbody>
+
+                                <tr ng-if="data.Status == 'Cook'">
+                                    <td colspan="3"><button class="btn btn-primary btn-block" ng-click="printkitchen(order.OrderID)">All Done</button></td>
+                                </tr>
+                                <tr ng-if="data.Status == 'Order'">
+                                    <td colspan="3"><button class="btn btn-primary btn-block" ng-click="cookall(order.OrderID)">All Cook</button></td>
+                                </tr>
+
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="data.Order == false">
+                <h1>Empty List</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="printkitchen" ng-hide="true">
+    <div class="col-md-4">
+        <h3>{{kitchenprint.TableName}}{{kitchenprint.Name}}</h3>
+        <table class="table table-hover">
+            <tr ng-repeat="data in kitchenprint.OrderItem">
+                <td>{{data.MenuName}}</td>
+                <td>{{data.Qty}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
