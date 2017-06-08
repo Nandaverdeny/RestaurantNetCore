@@ -174,7 +174,7 @@ controller.controller('testcontroller', function ($scope, testservice, kitchense
 
             popupWin.document.write('<html><head><title>Restaurant</title>'
                 + '<link href="/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />'
-                + '</head><body onload="window.print()"><center>'
+                + '</head><center>'
                 + '<div class="row"><h4>' + $scope.info.HeaderLine1 + '</h4></div>'
                 + '<div class="row"><h4>' + $scope.info.HeaderLine2 + '</h4></div>'
                 + '<div class="row"><h4>' + $scope.info.HeaderLine3 + '</h4></div>'
@@ -182,8 +182,10 @@ controller.controller('testcontroller', function ($scope, testservice, kitchense
                 + '<div class="row"><h4>' + $scope.info.FooterLine1 + '</h4></div>'
                 + '<div class="row"><h4>' + $scope.info.FooterLine2 + '</h4></div>'
                 + '<div class="row"><h4>' + $scope.info.FooterLine3 + '</h4></div>'
-                + '</body></html>');
-            popupWin.document.close();
+                + '</body><script>$(document).ready(function(){
+                + 'window.print();'    
+                + ' });</script></html>');'
+                + 'popupWin.document.close();
         })
        
     };
