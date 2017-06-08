@@ -171,7 +171,7 @@ controller.controller('testcontroller', function ($scope, testservice, kitchense
             var printContents = document.getElementById(div).innerHTML;
 
             var popupWin = window.open("", "");
-
+            
             popupWin.document.write('<html><head><title>Restaurant</title>'
                 + '<link href="/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />'
                 + '</head><center>'
@@ -182,10 +182,11 @@ controller.controller('testcontroller', function ($scope, testservice, kitchense
                 + '<div class="row"><h4>' + $scope.info.FooterLine1 + '</h4></div>'
                 + '<div class="row"><h4>' + $scope.info.FooterLine2 + '</h4></div>'
                 + '<div class="row"><h4>' + $scope.info.FooterLine3 + '</h4></div>'
-                + '</body><script>$(document).ready(function(){
-                + 'window.print();'    
-                + ' });</script></html>');'
-                + 'popupWin.document.close();
+                + '</body></html>');
+             
+            popupWin.document.close();
+            popupWin.print();
+            popupWin.close();
         })
        
     };
