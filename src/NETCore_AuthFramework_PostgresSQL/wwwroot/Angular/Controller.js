@@ -170,11 +170,11 @@ controller.controller('testcontroller', function ($scope, testservice, kitchense
             $scope.info = data;
             var printContents = document.getElementById(div).innerHTML;
 
-            var popupWin = window.open('about:blank', '_blank');
+            var popupWin = window.open('', '_blank');
             
             popupWin.document.write('<html><head><title>Restaurant</title>'
                 + '<link href="/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />'
-                + '</head><center>'
+                + '</head><body onload="window.print()"><center>'
                 + '<div class="row"><h4>' + $scope.info.HeaderLine1 + '</h4></div>'
                 + '<div class="row"><h4>' + $scope.info.HeaderLine2 + '</h4></div>'
                 + '<div class="row"><h4>' + $scope.info.HeaderLine3 + '</h4></div>'
@@ -185,8 +185,8 @@ controller.controller('testcontroller', function ($scope, testservice, kitchense
                 + '</body></html>');
              
             popupWin.document.close();
-            popupWin.print();
-            popupWin.close();
+            //popupWin.print();
+            //popupWin.close();
         })
        
     };
