@@ -170,7 +170,7 @@ controller.controller('testcontroller', function ($scope, testservice, kitchense
             $scope.info = data;
             var printContents = document.getElementById(div).innerHTML;
 
-            var popupWin = window.open("", "");
+            var popupWin = window.open('about:blank', '_blank');
             
             popupWin.document.write('<html><head><title>Restaurant</title>'
                 + '<link href="/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />'
